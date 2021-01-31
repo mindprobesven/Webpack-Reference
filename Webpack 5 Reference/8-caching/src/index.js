@@ -1,82 +1,45 @@
 /*
-Webpack - Output Management
+Webpack - Caching
 ----------------------------------------------------------------------------------------
+To make use of browser caching, generated chunk filenames can have unique hashes. Chunks
+are reused and loaded from cache unless they change and get a new hash.
 
-Splitting bundles by entry points
-----------------------------------------------------------------------------------------
-1. We have two JS file (index.js and print.js) and we want to split these into two output
-bundles [name].bundle.js
+[name].[contenthash].js
 
-2. Add this to the index.html
+1. The [contenthash] substitution will add a unique hash based on the content of an asset.
+When the asset's content changes, [contenthash] will change as well.
 
-<script src="./print.bundle.js"></script>
-<script src="./index.bundle.js"></script>
+Add to webpack.config.js in output:
 
-3. Edit the webpack.config.js
-New entry points:
+filename: '[name].[contenthash].js',
 
-entry: {
-    index: './src/index.js',
-    print: './src/print.js',
-  },
+2. Extracting the boilerplate. Webpack provides an optimization feature to split runtime
+code into a separate chunk using the optimization.runtimeChunk option. Set it to single
+to create a single runtime bundle for all chunks:
 
-New output:
-filename: '[name].bundle.js',
+Add to webpack.config.js under output:
 
-4. Build using shortcut specified in the package.json
+optimization: {
+     runtimeChunk: 'single',
+   },
+
+3. Create a vendors chunk, which includes all code from node_modules in the whole application.
+
+Add to webpack.config.js in optimization:
+
+moduleIds: 'deterministic',
+splitChunks: {
+       cacheGroups: {
+         vendor: {
+           test: /[\\/]node_modules[\\/]/,
+           name: 'vendors',
+           chunks: 'all',
+         },
+       },
+     },
+
+4. Build and observe how in /dist the chunks are created with a unique hash.
 npm run build
-
-Setting up HtmlWebpackPlugin
-----------------------------------------------------------------------------------------
-To avoid having to update the index.html manually to specify bundles, etc. the
-HtmlWebpackPlugin automized this process. It automatically generates the index.html
-
-1. Install the HtmlWebpackPlugin as dev dependency
-npm install --save-dev html-webpack-plugin
-
-2. Update the webpack.config.js
-Require the HtmlWebpackPlugin
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-Add under entry:
-
-plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Output Management',
-    }),
-  ],
-
-3. Build using shortcut specified in the package.json
-npm run build
-
-4. The index.html is automatically generated and all the bundles are added.
-
-Cleaning the /dist folder
-----------------------------------------------------------------------------------------
-To automatically clean the dist folder before each build use the clean-webpack-plugin
-
-1. Install the clean-webpack-plugin as dev dependency
-npm install --save-dev clean-webpack-plugin
-
-2. Update the webpack.config.js
-Require the clean-webpack-plugin
-
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
-Add under entry:
-
-plugins: [
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      title: 'Output Management',
-    }),
-  ],
-
-3. Build using shortcut specified in the package.json
-npm run build
-
-4. The /dist folder is now cleaned before a build.
 */
 
 import _ from 'lodash';
