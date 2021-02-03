@@ -14,7 +14,7 @@ async function getComponent() {
   const element = document.createElement('div');
 
   // instead of statically importing lodash, we'll use dynamic importing to separate a chunk
-  const { default: _ } = await import('lodash');
+  const { default: _ } = await import(/* webpackChunkName: "lodash" */ 'lodash');
 
   element.innerHTML = _.join(['Hello', 'webpack'], ' ');
   return element;
