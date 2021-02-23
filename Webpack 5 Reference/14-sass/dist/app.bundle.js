@@ -1,0 +1,2 @@
+(()=>{"use strict";console.log("Mode: production"),document.body.appendChild(function(){const e=document.createElement("H1"),o=document.createTextNode("SASS (SCSS)");return e.appendChild(o),e}())})();
+//# sourceMappingURL=app.bundle.js.map
