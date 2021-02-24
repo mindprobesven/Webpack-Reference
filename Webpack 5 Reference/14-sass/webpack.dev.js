@@ -25,8 +25,6 @@ module.exports = merge(common, {
             // Compiles Sass to CSS
             loader: 'sass-loader',
             options: {
-              // Prefer 'Dart Sass'
-              implementation: require('sass'),
               // Enables generation of CSS source maps
               sourceMap: true,
             }
