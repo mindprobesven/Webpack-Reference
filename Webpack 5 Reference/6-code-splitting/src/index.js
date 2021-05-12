@@ -16,12 +16,7 @@ Entry points
 1. We have two JS file (index.js and print.js) and we want to split these into two output
 bundles [name].bundle.js
 
-2. Add this to the index.html
-
-<script src="./print.bundle.js"></script>
-<script src="./index.bundle.js"></script>
-
-3. Edit the webpack.config.js
+2. Edit the webpack.config.js
 New entry points:
 
 entry: {
@@ -32,7 +27,7 @@ entry: {
 New output:
 filename: '[name].bundle.js',
 
-4. Build using shortcut specified in the package.json
+3. Build using shortcut specified in the package.json
 npm run build
 
 Pitfalls: If there are any duplicated modules between entry chunks they will be included
